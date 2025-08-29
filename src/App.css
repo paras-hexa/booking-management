@@ -16,3 +16,8 @@
 .Toastify__progress-bar {
   background: #83c5e9;
 }
+
+
+div::-webkit-scrollbar {
+  display: none;
+}

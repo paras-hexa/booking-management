@@ -10,6 +10,8 @@ import { Movie } from './Pages/Movie';
 import { Theater } from './Pages/Theater';
 import { Myticket } from './Pages/Myticket';
 import {TicketsList} from './Pages/TicketListing';
+import { Home2 } from './Pages/Place_Time';
+import { MovieSelection } from './Pages/P';
 function App() {
   const [count, setCount] = useState(0)
   return (
@@ -32,6 +34,9 @@ function App() {
           <Route index element={<TicketsList type="upcoming" />} />
           <Route path="history" element={<TicketsList  type="history" />} />
         </Route>
+        <Route path="/place and time" element={<Home2 />}/>
+        
+    
 
         {/* Other pages */}
       </Routes>

@@ -37,7 +37,7 @@ export const Myticket = () => {
                 </div>
 
                 {/* Body changes with nested routes */}
-                <div className="h-[70vh] overflow-y-auto pr-2" >
+                <div className="h-[70vh] overflow-y-auto .scrollbar-hide pr-2" >
                      <Outlet />
                 </div>
                
