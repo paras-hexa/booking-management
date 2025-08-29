@@ -1,0 +1,18 @@
+/* Example CSS */
+.Toastify__toast--success {
+  background: #f5f6f5; /* green-600 */
+  color: #000000;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.Toastify__toast--error {
+  background: #fcfdff; /* red-600 */
+  color: #000000;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.Toastify__progress-bar {
+  background: #83c5e9;
+}
