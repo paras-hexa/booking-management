@@ -4,7 +4,7 @@ export const Card = ({ image, title }) => {
   return (
     <div className="relative w-48 flex flex-col items-center">
       {/* Movie Poster */}
-      <Link to={'/place and time'}>
+      <Link to={'/home/movie/place and time'}>
       <div className="w-44 h-64 rounded-xl overflow-hidden ">
         <img
           src={image}

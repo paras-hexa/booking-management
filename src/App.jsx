@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
+import { UseProtectedRoute } from './hooks/UseProtectedRoute';
 import { toast, ToastContainer } from 'react-toastify';
 import { Routes, Route, Router, Navigate } from 'react-router-dom'
 import { Login } from './Pages/Login'
@@ -9,9 +10,14 @@ import { Home } from './Pages/Home';
 import { Movie } from './Pages/Movie';
 import { Theater } from './Pages/Theater';
 import { Myticket } from './Pages/Myticket';
-import {TicketsList} from './Pages/TicketListing';
-import { Home2 } from './Pages/Place_Time';
-import { MovieSelection } from './Pages/P';
+import { TicketsList } from './Pages/TicketListing';
+import { PlaceAndTime } from './Pages/Place_Time';
+import { Seatmap } from './Pages/Seatmap';
+import { BookingDetail } from './Pages/Ticketdetails';
+import { PaymentPage } from './Pages/Payment';
+import { PaymentSuccess } from './Pages/PaymentSuccesspage';
+import { TicketFinalView } from './Pages/Viewticket';
+
 function App() {
   const [count, setCount] = useState(0)
   return (
@@ -26,17 +32,22 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Registration />} />
         {/* Home nested routes */}
-        <Route path="/home" element={<Home />}>
+        <Route path="/home" element={<UseProtectedRoute><Home /></UseProtectedRoute>}>
           <Route index element={<Movie />} />
           <Route path="theater" element={<Theater />} />
         </Route>
         <Route path="/myticket" element={<Myticket />}>
           <Route index element={<TicketsList type="upcoming" />} />
-          <Route path="history" element={<TicketsList  type="history" />} />
+          <Route path="history" element={<TicketsList type="history" />} />
         </Route>
-        <Route path="/place and time" element={<Home2 />}/>
-        
-    
+        <Route path="/home/movie/place and time" element={<PlaceAndTime />} />
+        <Route path="/seatselection" element={<Seatmap />} />
+        <Route path="/bookingdetails" element={<BookingDetail />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+        <Route path="/viewmyticket" element={<TicketFinalView/>} />
+           
+
 
         {/* Other pages */}
       </Routes>

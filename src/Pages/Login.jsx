@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Eye, EyeOff } from 'lucide-react'; // eye icons
 import { useNavigate } from 'react-router-dom';
-
+import { api } from '../api/axiosInstance';
 export const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -22,14 +22,21 @@ export const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Login Submitted:', formData);
-    if (true) {
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      console.log('Login Submitted:', formData);
+      const res = await api.post("/auth/login", formData)
+      console.log(res.data);
+      localStorage.setItem("token", res.data.accessToken)
       toast.success('Login Successfully');
       Navigate('/home')
+      setFormData({ email: '', password: '' });
+    } catch (error) {
+      console.log(error);
+      toast.error("Login Failed")
+
     }
-    setFormData({ email: '', password: '' });
   };
 
   return (
