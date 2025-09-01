@@ -7,6 +7,7 @@ export const Navbar = () => {
 
   const handlelogout = (e) => {
     e.preventDefault();
+    localStorage.setItem("token" , "")
     navigate("/login");
   };
 

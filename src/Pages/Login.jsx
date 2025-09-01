@@ -27,11 +27,20 @@ export const Login = () => {
       e.preventDefault();
       console.log('Login Submitted:', formData);
       const res = await api.post("/auth/login", formData)
-      console.log(res.data);
-      localStorage.setItem("token", res.data.accessToken)
-      toast.success('Login Successfully');
-      Navigate('/home')
-      setFormData({ email: '', password: '' });
+      const token = res.data.data.accessToken
+      if (token) {
+        localStorage.setItem("token", token)
+        toast.success('Login Successfully');
+        Navigate('/home')
+        setFormData({ email: '', password: '' });
+      }else{
+
+        throw new Error("bad request");
+        
+      }
+
+
+
     } catch (error) {
       console.log(error);
       toast.error("Login Failed")

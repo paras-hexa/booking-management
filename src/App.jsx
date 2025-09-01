@@ -36,7 +36,7 @@ function App() {
           <Route index element={<Movie />} />
           <Route path="theater" element={<Theater />} />
         </Route>
-        <Route path="/myticket" element={<Myticket />}>
+        <Route path="/myticket" element={<UseProtectedRoute><Myticket /></UseProtectedRoute>}>
           <Route index element={<TicketsList type="upcoming" />} />
           <Route path="history" element={<TicketsList type="history" />} />
         </Route>
