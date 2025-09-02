@@ -1,27 +1,29 @@
+import { useState , useEffect } from "react";
 import { Card } from "../Components/Movie-Card";
+import { api } from "../api/axiosInstance";
+import { headers } from "../constant";
 export const Movie = () => {
-  const movies = [
-    { title: "GOT", image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Kingdom of Apes", image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Civil War",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Dune", image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "IF",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-    { title: "Sheriff",image: "https://cdn.europosters.eu/image/350/posters/game-of-thrones-season-1-key-art-i161816.jpg" },
-  ];
+ const [Movies, setMovies] = useState([])
 
+ async function fetchmovie(){
+    try {
+      const res = await api.get('/movies' , {
+        headers:headers
+      })
+      setMovies(res.data)
+    } catch (error) {
+      
+    }
+ }
+
+   useEffect(() => {
+     fetchmovie()
+   }, [])
+   
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-      {movies.map((m, i) => (
-        <Card key={i} image={m.image} title={m.title} />
+      {Movies.map((m) => (
+        <Card key={m.id} id={m.id} image={m.image} name={m.name} />
       ))}
     </div>
   );

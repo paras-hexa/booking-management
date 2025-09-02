@@ -1,8 +1,31 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { api } from "../api/axiosInstance";
+import { headers } from "../constant";
 
 export const Seatmap = () => {
+    const location = useLocation()
+    console.log(location.state);    
     const navigate = useNavigate();
+    
+    const theater = location.state.theater
+    const movie = location.state.movie
+    const count = location.state.seats
+    
+
+    async function fetchlayout(){
+        const res = await api.get(`/theaters/${theater.id}/screens` , {
+            headers:headers
+        })
+        console.log(res.data);
+        
+    }
+    
+    useEffect(() => {
+      fetchlayout()
+    }, [])
+    
 
     const seatCategories = [
         { name: "Platinum", price: 520, rows: ["A", "B"] },

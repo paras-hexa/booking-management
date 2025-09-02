@@ -5,7 +5,8 @@ import { NavLink } from "react-router-dom";
 
 export const SeatSelectionModal = ({ isOpen, onClose, onConfirm }) => {
   const [selectedSeats, setSelectedSeats] = useState(null);
-
+  console.log(selectedSeats);
+  
   if (!isOpen) return null;
 
 
@@ -64,7 +65,7 @@ export const SeatSelectionModal = ({ isOpen, onClose, onConfirm }) => {
       >
         Cancel
       </button>
-      <NavLink to={'/seatselection'}>
+     
       <button
         onClick={handleConfirm}
         disabled={!selectedSeats}
@@ -76,7 +77,7 @@ export const SeatSelectionModal = ({ isOpen, onClose, onConfirm }) => {
       >
         Select seats
       </button>
-      </NavLink>
+     
     </div>
   </div>
 </div>

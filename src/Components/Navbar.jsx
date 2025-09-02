@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 export const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -8,6 +8,7 @@ export const Navbar = () => {
   const handlelogout = (e) => {
     e.preventDefault();
     localStorage.setItem("token" , "")
+    toast.success("Logged out succesfully")
     navigate("/login");
   };
 

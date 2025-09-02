@@ -1,6 +1,6 @@
 import { MapPin, ChevronRight } from "lucide-react"; // icon library
 
-export const TheaterCard = ({ name, location }) => {
+export const TheaterCard = ({ id,name, location }) => {
   return (
     <div className="p-5 rounded-xl border border-gray-300 bg-transparent hover:bg-gradient-to-r hover:from-blue-200 hover:to-transparent transition flex items-center justify-between">
       

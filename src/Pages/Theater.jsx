@@ -1,24 +1,33 @@
+import { useState , useEffect } from "react";
 import { TheaterCard } from "../Components/Theater-Card";
-
+import { api } from "../api/axiosInstance";
+import { headers } from "../constant";
+import { Link } from "react-router-dom";
 export const Theater = () => {
-  const theaters = [
-    { name: "Cinemax - Downtown", location: "Main Street" },
-    { name: "IMAX - City Center", location: "Mall Road" },
-    { name: "PVR - Riverside", location: "Riverfront" },
+  const [theaters, settheaters] = useState([])
 
-  ];
- theaters.map((t)=>{
-    console.log(t);
-    
- })
- 
+  async function fetchtheaters() {
+    const res = await api.get('/theaters' , {
+      headers:headers
+    })
+    console.log(res);
+    settheaters(res.data.data)
+  }
+  useEffect(() => {
+     fetchtheaters()
+  }, [])
+  
 
   return (
     <div className="grid gap-4">
-      {theaters.map((t,i) => (
-        <div key={i}>
-            <TheaterCard name={t.name} location={t.location}/>
+      {theaters.map((t) => (
+       
+        <div key={t.id}>
+           <Link to={`movieandtime/${t.id}`}>
+            <TheaterCard id={t.id} name={t.name} location={t.location}/>
+            </Link>
         </div>
+        
       )) 
       
       }

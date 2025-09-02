@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
 import { UseProtectedRoute } from './hooks/UseProtectedRoute';
@@ -17,7 +17,7 @@ import { BookingDetail } from './Pages/Ticketdetails';
 import { PaymentPage } from './Pages/Payment';
 import { PaymentSuccess } from './Pages/PaymentSuccesspage';
 import { TicketFinalView } from './Pages/Viewticket';
-
+import { TheaterDetail } from './Pages/Movie_Time';
 function App() {
   const [count, setCount] = useState(0)
   return (
@@ -35,12 +35,13 @@ function App() {
         <Route path="/home" element={<UseProtectedRoute><Home /></UseProtectedRoute>}>
           <Route index element={<Movie />} />
           <Route path="theater" element={<Theater />} />
+          <Route path="theater/movieandtime/:id" element={<TheaterDetail/>} />
         </Route>
         <Route path="/myticket" element={<UseProtectedRoute><Myticket /></UseProtectedRoute>}>
           <Route index element={<TicketsList type="upcoming" />} />
           <Route path="history" element={<TicketsList type="history" />} />
         </Route>
-        <Route path="/home/movie/place and time" element={<PlaceAndTime />} />
+        <Route path="/home/movie/placeandtime/:id" element={<PlaceAndTime />} />
         <Route path="/seatselection" element={<Seatmap />} />
         <Route path="/bookingdetails" element={<BookingDetail />} />
         <Route path="/payment" element={<PaymentPage />} />

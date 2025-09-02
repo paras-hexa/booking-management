@@ -4,15 +4,18 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Eye, EyeOff } from 'lucide-react';
 import { api } from '../api/axiosInstance';
-import { token } from '../constant';
+import { headers} from '../constant'
+import { useNavigate } from 'react-router-dom';
 export const Registration = () => {
+    console.log(headers);
+    
     const [formData, setFormData] = useState({
-        firstname: '',
-        lastname: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
     });
-
+    const navigate = useNavigate()
     const [hoveredField, setHoveredField] = useState(null);
     const [ShowPassword, setShowPassword] = useState(false)
     const handleChange = (e) => {
@@ -24,24 +27,28 @@ export const Registration = () => {
     };
 
     const handleSubmit = async (e) => {
-
-        e.preventDefault();
-        console.log('Login Submitted:', formData);
-        const res = await api("/auth/signup", formData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "X-Custom-Header": "value"
-            }
-
-        })
-        toast.success("Sign Up Succesfuly")
-        // Reset form (for now)`
-        setFormData({
-            firstname: '',
-            lastname: '',
-            email: '',
-            password: '',
-        });
+  
+       try {
+         e.preventDefault();
+         console.log('Login Submitted:', formData);
+         const res = await api.post("/auth/signup", formData, {
+             headers: headers
+ 
+         })
+         console.log(res.data);
+         
+         toast.success("Sign Up Succesfuly")
+         setFormData({
+             firstName: '',
+             lastName: '',
+             email: '',
+             password: '',
+         });
+         navigate('/login')
+       } catch (error) {
+        console.log(error);
+        toast.error(error)
+       }
     };
 
     return (
@@ -65,8 +72,8 @@ export const Registration = () => {
                         </label>
                         <input
                             type="text"
-                            name="firstname"
-                            value={formData.firstname}
+                            name="firstName"
+                            value={formData.firstName}
                             onChange={handleChange}
                             placeholder="First Name"
                             required
@@ -89,8 +96,8 @@ export const Registration = () => {
                         </label>
                         <input
                             type="text"
-                            name="lastname"
-                            value={formData.lastname}
+                            name="lastName"
+                            value={formData.lastName}
                             onChange={handleChange}
                             placeholder="Last Name"
                             required
