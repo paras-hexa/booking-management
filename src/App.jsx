@@ -1,4 +1,4 @@
-import { useState , useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
 import { UseProtectedRoute } from './hooks/UseProtectedRoute';
@@ -35,19 +35,20 @@ function App() {
         <Route path="/home" element={<UseProtectedRoute><Home /></UseProtectedRoute>}>
           <Route index element={<Movie />} />
           <Route path="theater" element={<Theater />} />
-          <Route path="theater/movieandtime/:id" element={<TheaterDetail/>} />
         </Route>
         <Route path="/myticket" element={<UseProtectedRoute><Myticket /></UseProtectedRoute>}>
           <Route index element={<TicketsList type="upcoming" />} />
           <Route path="history" element={<TicketsList type="history" />} />
         </Route>
         <Route path="/home/movie/placeandtime/:id" element={<PlaceAndTime />} />
+        <Route path="/home/theater/movieandtime/:id" element={<TheaterDetail />} />
+
         <Route path="/seatselection" element={<Seatmap />} />
         <Route path="/bookingdetails" element={<BookingDetail />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/paymentsuccess" element={<PaymentSuccess />} />
-        <Route path="/viewmyticket" element={<TicketFinalView/>} />
-           
+        <Route path="/viewmyticket" element={<TicketFinalView />} />
+
 
 
         {/* Other pages */}
