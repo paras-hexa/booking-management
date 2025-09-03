@@ -8,7 +8,6 @@ import { headers } from "../constant";
 // 🕒 format UTC -> IST
 function formatTimeToIST(dateStr) {
   const {id} = useParams()
-  console.log(id);
   
   return new Date(dateStr).toLocaleTimeString("en-US", {
     hour: "2-digit",
