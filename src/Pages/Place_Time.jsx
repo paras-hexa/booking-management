@@ -62,7 +62,8 @@ export const PlaceAndTime = () => {
         params: { date: formattedDate },
         headers,
       });
-
+    console.log("res",res.data);
+    
       const nextTheaters = res.data.theaters || [];
       setTheaters(nextTheaters);
 
@@ -108,7 +109,9 @@ export const PlaceAndTime = () => {
         movie: moviedata,
         date: selectedDate,
         theater: selectedTheater,     // full current theater object
-        time: selectedShowtime,       // full current showtime object
+        time: selectedShowtime,  
+        showtimeID : selectedShowtime.showTimeId ,
+     // full current showtime object
         seats,
       },
     });

@@ -7,11 +7,11 @@ import { SeatSelectionModal } from "../Components/SeatOverlay";
 import { headers } from "../constant";
 // 🕒 format UTC -> IST
 function formatTimeToIST(dateStr) {
-  const {id} = useParams()
-  
+  const {id} = useParams();
+
   return new Date(dateStr).toLocaleTimeString("en-US", {
     hour: "2-digit",
-    minute: "2-digit",
+    minute: "2-digit", 
     hour12: true,
     timeZone: "Asia/Kolkata",
   });
@@ -88,6 +88,7 @@ export const TheaterDetail = () => {
         movie: selectedMovie,
         date: selectedDate,
         time: selectedTime,
+        showtimeID : selectedTime.id ,
         seats,
       },
     });
@@ -141,7 +142,7 @@ const dateScrollRef = useRef(null);
 
             <div
               ref={dateScrollRef}
-              className="flex gap-1 overflow-x-auto whitespace-nowrap scrollbar-hide flex-1"
+  className="flex gap-1 overflow-x-auto whitespace-nowrap scrollbar-hide flex-1 max-w-[300px]"
             >
               {dates.map((d) => (
                 <button
