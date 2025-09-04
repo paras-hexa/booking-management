@@ -64,7 +64,7 @@ export const TheaterDetail = () => {
           headers,
         });
 
-        console.log("API Data:", res.data);
+        console.log("API Data of shows:", res.data);
 
         // API shape: { data: [ {id, name, showTimes: []} ] }
         setMovies(res.data.data || []);
