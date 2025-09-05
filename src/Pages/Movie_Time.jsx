@@ -1,18 +1,15 @@
-import { useEffect, useState , useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, ChevronRight,MapPin , ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, ArrowLeft } from "lucide-react";
 import { api } from "../api/axiosInstance";
 import { Navbar } from "../Components/Navbar";
 import { SeatSelectionModal } from "../Components/SeatOverlay";
 import { headers } from "../constant";
 // 🕒 format UTC -> IST
 function formatTimeToIST(dateStr) {
-  const {id} = useParams()
-
-  
   return new Date(dateStr).toLocaleTimeString("en-US", {
     hour: "2-digit",
-    minute: "2-digit", 
+    minute: "2-digit",
     hour12: true,
     timeZone: "Asia/Kolkata",
   });
@@ -43,17 +40,17 @@ export const TheaterDetail = () => {
     d.setDate(today.getDate() + i);
     return d;
   });
-   useEffect(() => {
-     async function fetchtheater() {
-      const res = await api.get(`/theaters/${id}`,{
+  useEffect(() => {
+    async function fetchtheater() {
+      const res = await api.get(`/theaters/${id}`, {
         headers
       })
       setTheater(res.data.data)
-     }
-     fetchtheater()
-   }, [])
-   
-  // fetch movies + showtimes
+    }
+    fetchtheater()
+  }, [])
+
+  // fetch movies + showtimes = showdata
   useEffect(() => {
     async function fetchShows() {
       try {
@@ -75,9 +72,8 @@ export const TheaterDetail = () => {
     fetchShows();
   }, [id, selectedDate]);
 
-  const handleBookNow = (movie, time) => {
+  const handleBookNow = (movie) => {
     setSelectedMovie(movie);
-    setSelectedTime(time);
     setIsModalOpen(true);
   };
 
@@ -89,13 +85,12 @@ export const TheaterDetail = () => {
         movie: selectedMovie,
         date: selectedDate,
         time: selectedTime,
-        showtimeID : selectedTime.id ,
+        showtimeID: selectedTime.id,
         seats,
       },
     });
   };
-const dateScrollRef = useRef(null);
-  const [activeTime, setActiveTime] = useState(null);
+  const dateScrollRef = useRef(null);
 
   const scrollDates = (direction) => {
     if (dateScrollRef.current) {
@@ -140,20 +135,19 @@ const dateScrollRef = useRef(null);
             >
               <ChevronLeft size={20} />
             </button>
- 
+
             <div
               ref={dateScrollRef}
-  className="flex gap-1 overflow-x-auto whitespace-nowrap scrollbar-hide flex-1 max-w-[300px]"
+              className="flex gap-1 overflow-x-auto whitespace-nowrap scrollbar-hide flex-1 max-w-[300px]"
             >
               {dates.map((d) => (
                 <button
                   key={d.toDateString()}
                   onClick={() => setSelectedDate(d)}
-                  className={`px-4 py-2 rounded-lg border min-w-[90px] text-center transition-all ${
-                    selectedDate.toDateString() === d.toDateString()
+                  className={`px-4 py-2 rounded-lg border min-w-[90px] text-center transition-all ${selectedDate.toDateString() === d.toDateString()
                       ? "bg-blue-600 text-white border-blue-600"
                       : "bg-white text-gray-600 border-gray-300 hover:bg-blue-100"
-                  }`}
+                    }`}
                 >
                   <div>
                     {d.toLocaleDateString("en-US", {
@@ -197,27 +191,28 @@ const dateScrollRef = useRef(null);
                   {/* Book Now */}
                   <button
                     onClick={() =>
-                      handleBookNow(movie, movie.showTimes?.[0] || null)
+                      handleBookNow(movie)
                     }
                     className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg bg-transparent hover:bg-blue-600 hover:text-white transition-all"
                   >
                     Book Now
                   </button>
                 </div>
-
+  
                 {/* Showtimes */}
                 <div className="flex gap-2 flex-wrap mt-3">
+                
                   {movie.showTimes?.map((st) => (
+                    
                     <button
                       key={st.id}
-                      onClick={() => setActiveTime(st.id)}
-                      className={`px-3 py-1 border rounded-md text-sm transition-all ${
-                        activeTime === st.id
+                      onClick={() => setSelectedTime(st)}
+                      className={`px-3 py-1 border rounded-md text-sm transition-all ${selectedTime?.id === st.id
                           ? "bg-blue-600 text-white border-blue-600"
                           : "bg-transparent border-gray-400 text-gray-600 hover:bg-blue-100"
-                      }`}
+                        }`}
                     >
-                      {formatTimeToIST(st.startTime)}
+                      {`${formatTimeToIST(st.startTime)}`}
                     </button>
                   ))}
                 </div>

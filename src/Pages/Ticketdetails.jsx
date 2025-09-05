@@ -1,26 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState  } from "react";
+import { useNavigate , useLocation } from "react-router-dom";
 export const BookingDetail = () => {
-  const [ticket, setTicket] = useState({
-  "movieTitle": "SPIDERMAN NO WAY HOME",
-  "date": "Mon, 23 Oct 2023",
-  "time": "14:40",
-  "category": "Middle SEAT",
-  "price": 250,
-  "seats": ["C8", "C9", "C10"],
-  "serviceCharge": 50,
-  "total": 800
-});
+
 
 const navigate = useNavigate()
+const location = useLocation()
+console.log(location.state);
 
-//   useEffect(() => {
-//     // Example API call (replace with your real API endpoint)
-//     fetch("/api/ticket")
-//       .then((res) => res.json())
-//       .then((data) => setTicket(data))
-//       .catch((err) => console.error(err));
-//   }, []);
+const date = new Date(location.state.date);
+
+const formatteddate = date.toLocaleDateString("en-GB", {
+  weekday: "short",   // Mon
+  day: "2-digit",     // 23
+  month: "short",     // Oct
+  year: "numeric"     // 2023
+});
+ 
+function formatTo24Hour(isoString) {
+  const date = new Date(isoString);
+  return date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+}
+const time = formatTo24Hour(location.state.time.startTime)
+console.log(formatTo24Hour("2025-09-05T16:00:00.000Z")); 
+// 👉 "21:30" (IST)
+console.log( location.state.selectedSeats);
+
+  const ticket ={
+  "movieTitle": location.state.movie.name,
+  "date": formatteddate,
+  "time": time,
+  "category": "Middle SEAT",
+  "price": 250,
+  "seats": location.state.selectedSeats,
+  "serviceCharge":(location.state.totalPrice)*0.06 ,
+  "total": location.state.totalPrice || 0
+};
+
+
 
   if (!ticket) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -52,7 +72,9 @@ const navigate = useNavigate()
           <span className="font-semibold">{ticket.time}</span>
         </div>
         <p className="text-blue-500 font-medium mb-4">
-          {ticket.seats.join(", ")}
+          {ticket.seats.map((s)=>{
+            return `${s.seat} `
+          })}
         </p>
 
         {/* Transaction Detail */}
