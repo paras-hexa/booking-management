@@ -92,7 +92,7 @@ export const Seatmap = () => {
                                 !excludedColumns.includes(col) &&
                                 !bookedSeats.includes(seat)
                             ) {
-                                availableSeats.push({ seat, price });
+                                availableSeats.push({ seat, price , type : cat.type });
                             }
                         });
                     });
