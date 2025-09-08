@@ -1,8 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useSearchParams} from "react-router-dom";
 import { CheckCircle2 } from "lucide-react"; // success tick icon
 
 export const PaymentSuccess = () => {
+   const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get("session_id");
   const navigate = useNavigate();
 
   return (

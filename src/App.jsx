@@ -46,7 +46,7 @@ function App() {
         <Route path="/seatselection" element={<Seatmap />} />
         <Route path="/bookingdetails" element={<BookingDetail />} />
         <Route path="/payment" element={<PaymentPage />} />
-        <Route path="/paymentsuccess" element={<PaymentSuccess />} />
+        <Route path="/success" element={<PaymentSuccess />} />
         <Route path="/viewmyticket" element={<TicketFinalView />} />
 
 
