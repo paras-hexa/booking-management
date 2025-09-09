@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { downloadTicketPDF } from "../utils/downloadticket";
 export const BookingDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();

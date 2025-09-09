@@ -57,7 +57,7 @@ export const PaymentPage = () => {
           return {
             row,
             column,
-            layoutType: s.type, // e.g. Classic, Platinum
+            layoutType: s.type , // e.g. Classic, Platinum
           };
         }),
       };
@@ -70,8 +70,8 @@ export const PaymentPage = () => {
 
       // make POST request to your backend
       const response = await api.post("/orders", orderPayload, { headers });
-      console.log("Order response:", response);
-
+      console.log("Order response:", response.data);
+      localStorage.setItem("order response" , response.data.orderId)
       if (response.status !== 201) {
         throw new Error("Failed to create order");
       }

@@ -4,58 +4,45 @@ import { api } from "../api/axiosInstance";
 import { headers } from "../constant";
 
 function autoSelectSeats(enrichedLayout, bookedSeats, count) {
-    let bestGroup = [];
-    let allAvailable = [];
-   console.log("booked in fun" , bookedSeats);
-   
-    for (const cat of enrichedLayout) {
-        const { layout, excludedRows = [], excludedSeats = [], excludedColumns = [], price = 0, type } = cat;
-        const [startCol, endCol] = layout.columns;
-        const columns = Array.from({ length: endCol - startCol + 1 }, (_, i) => i + startCol);
+  const selected = [];
 
-        // Expand rows properly (A..D etc)
-        const [startRow, endRow] = layout.rows;
-        const rows = [];
-        for (let c = startRow.charCodeAt(0); c <= endRow.charCodeAt(0); c++) {
-            rows.push(String.fromCharCode(c));
-        }
+  for (const cat of enrichedLayout) {
+    const { layout, excludedRows = [], excludedSeats = [], excludedColumns = [], price = 0, type } = cat;
 
-        for (const row of rows) {
-            if (excludedRows.includes(row)) continue;
+    // Expand columns (range [1,10])
+    const [startCol, endCol] = layout.columns;
+    const columns = Array.from({ length: endCol - startCol + 1 }, (_, i) => i + startCol);
 
-            let currentGroup = [];
-
-            for (const col of columns) {
-                const seat = `${row}${col}`;
-                const blocked =
-                    excludedSeats.includes(seat) ||
-                    excludedColumns.includes(col) ||
-                    bookedSeats.has(seat);
-
-                if (!blocked) {
-                    const seatObj = { seat, price, type };
-                    allAvailable.push(seatObj);
-
-                    currentGroup.push(seatObj);
-                    if (currentGroup.length === count) return currentGroup; // exact match
-                } else {
-                    if (currentGroup.length > bestGroup.length) bestGroup = [...currentGroup];
-                    currentGroup = [];
-                }
-            }
-
-            if (currentGroup.length > bestGroup.length) bestGroup = [...currentGroup];
-        }
+    // Expand rows (e.g. ["A","D"] => A,B,C,D)
+    const [startRow, endRow] = layout.rows;
+    const rows = [];
+    for (let c = startRow.charCodeAt(0); c <= endRow.charCodeAt(0); c++) {
+      rows.push(String.fromCharCode(c));
     }
 
-    // 1st priority: inline match
-    if (bestGroup.length) return bestGroup;
+    for (const row of rows) {
+      if (excludedRows.includes(row)) continue;
 
-    // 2nd priority: first N available anywhere
-    return allAvailable.slice(0, count);
+      for (const col of columns) {
+        const seat = `${row}${col}`;
+        const blocked =
+          excludedSeats.includes(seat) ||
+          excludedColumns.includes(col) ||
+          bookedSeats.has(seat);
+
+        if (!blocked) {
+          selected.push({ seat, row, column: col, price, type });
+          if (selected.length === count) {
+            return selected; // stop once we have enough
+          }
+        }
+      }
+    }
+  }
+   console.log(selected);
+   
+  return selected;
 }
-
-
 
 export const Seatmap = () => {
     const location = useLocation();
@@ -82,10 +69,6 @@ export const Seatmap = () => {
 
                 let parsedLayout = resShowtime.data.data.screen.layout
 
-                console.log("before", parsedLayout);
-                console.log("after", JSON.parse(parsedLayout));
-
-
                 if (typeof (parsedLayout) === "string") {
                     try {
                         parsedLayout = JSON.parse(parsedLayout);
@@ -95,20 +78,14 @@ export const Seatmap = () => {
                     }
                 }
 
-
-
-
                 const priceMap = {};
 
                 if (resShowtime.data.data?.price) {
                     resShowtime.data.data.price.forEach((p) => {
-                        console.log(p);
 
                         priceMap[p.layoutType] = p.price;
                     });
                 }
-
-
 
                 // Step 5: merge price into layout
                 const enrichedLayout = parsedLayout.map((cat) => ({
@@ -119,70 +96,47 @@ export const Seatmap = () => {
                 setSeatLayout(enrichedLayout);
 
                 // Step 6: mark booked seats
-                const orders = resShowtime.data.data.orders
-                // const booked = [];
-                // orders.forEach((ord)=>{
-                //   ord.seatData?.seats?.forEach((s)=>{
-                //     booked.push(`${s.row}${s.column}`)
-                //   })
-                // })
-                 
-                // setBookedSeats(booked);
+
+                const OrderRes = await api.get('/orders', { headers })
+
+                const orders = OrderRes?.data || [];
                 const nextBlocked = new Set();
 
-                // Handle different shapes: array of strings OR array of {row,column}
-                const fromShowtime = orders ?? [];
-                fromShowtime.forEach(seat => {
-                    if (typeof seat === 'string') {
-                        nextBlocked.add(seat);                 // e.g. "A1"
-                    } else if (seat?.row && seat?.column != null) {
-                        nextBlocked.add(`${seat.row}${seat.column}`);
-                    }
-                });
-                
-                // 2) Active Orders (treat PENDING + SUCCESS as blocked)
-                // If your backend supports these query params, use them:
-                const ordRes = await api.get('/orders', {
-                    headers,
-                    params: { showtimeId: showtimeID, status: 'PENDING,COMPLETED' }
-                });
-
-                console.log(ordRes);
-                 
-
-                (ordRes.data ?? []).forEach(o => {
-                    // Fallback: if backend ignores params, filter here:
-                    if (o.showtimeId !== showtimeID) return;
-                    if (!['PENDING', 'SUCCESS'].includes(o.status)) return;
-
-                    o.seatData?.seats?.forEach(s => {
-                        if (s?.row && s?.column != null) {
-                            nextBlocked.add(`${s.row}${s.column}`);
+                orders.forEach(order => {
+                    // only process orders for the current showtime
+                    if (order.showtimeId === showtimeID) {
+                        if (order?.seatData?.seats) {
+                            order.seatData.seats.forEach(seat => {
+                                if (seat?.row && seat?.column != null) {
+                                    nextBlocked.add(`${seat.row}${seat.column}`);
+                                }
+                            });
                         }
-                    });
+                    }
                 });
 
                 setBookedSeats(nextBlocked);
-                                 console.log("ordeer" , orders , bookedSeats);
+                console.log("Blocked seats for this showtime:", nextBlocked);
 
-                 console.log(bookedSeats , "book seat is ready now you can call auto select");
-                 
-                // Auto pre-select seats inline (first N available seats)               
-                if (count > 0) {
-                    const autoSeats = autoSelectSeats(enrichedLayout, bookedSeats, count);
-                    setSelectedSeats(autoSeats);
-                    console.log("Auto selected:", autoSeats);
-                }
+
+
 
             } catch (err) {
                 console.error("Error fetching layout:", err);
             }
+
         }
 
 
         fetchLayout();
     }, [showtimeID]);
-    console.log("sl", seatLayout);
+
+    useEffect(() => {
+        if (count > 0 ) {
+            const autoSeats = autoSelectSeats(seatLayout, bookedSeats, count);
+            setSelectedSeats(autoSeats);
+        }
+    }, [bookedSeats, count, seatLayout]);
 
     const toggleSeat = (seat, price, type) => {
         if (bookedSeats.has(seat)) return;
@@ -203,7 +157,6 @@ export const Seatmap = () => {
             }
         }
     };
-    console.log("seat Layout", seatLayout);
 
 
     const totalPrice = selectedSeats.reduce((acc, s) => acc + s.price, 0);
@@ -276,7 +229,7 @@ export const Seatmap = () => {
                                                         const isSelected = selectedSeats.some(
                                                             (s) => s.seat === seat
                                                         );
-                                                   
+
                                                         const isBooked = bookedSeats.has(seat);
 
                                                         return (
