@@ -36,7 +36,7 @@ export const downloadTicketPDF = async (orderId) => {
     const doc = new jsPDF({
       orientation: "portrait",
       unit: "px",
-      format: [400, 600],
+      format: [400, 500],
     });
 
     // Background dark
@@ -67,7 +67,7 @@ export const downloadTicketPDF = async (orderId) => {
     doc.line(350, 15, 350, 250);
 
     // Left side (date/time vertical)
-    doc.setFontSize(12);
+    doc.setFontSize(14);
     doc.setTextColor("#D1D5DB");
     doc.text(`${date}, ${time}`, 20, 180, { angle: 90 });
 
@@ -78,7 +78,7 @@ export const downloadTicketPDF = async (orderId) => {
     doc.text(movie.toUpperCase(), 200, 150, { align: "center" });
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
+    doc.setFontSize(14);
     doc.setTextColor("#E5E7EB");
     doc.text(`Theater:${theater}`, 200, 170, { align: "center" });
     doc.text(`Seats:${seats}`, 200, 190, { align: "center" });
