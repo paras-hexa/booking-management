@@ -39,7 +39,6 @@ function autoSelectSeats(enrichedLayout, bookedSeats, count) {
       }
     }
   }
-   console.log(selected);
    
   return selected;
 }
@@ -52,7 +51,6 @@ export const Seatmap = () => {
     const movie = location.state.movie;
     const count = location.state.seats;
     const showtimeID = location.state.showtimeID;
-    console.log("sh id", showtimeID);
 
     const [seatLayout, setSeatLayout] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
@@ -116,10 +114,6 @@ export const Seatmap = () => {
                 });
 
                 setBookedSeats(nextBlocked);
-                console.log("Blocked seats for this showtime:", nextBlocked);
-
-
-
 
             } catch (err) {
                 console.error("Error fetching layout:", err);
@@ -162,7 +156,7 @@ export const Seatmap = () => {
     const totalPrice = selectedSeats.reduce((acc, s) => acc + s.price, 0);
 
     return (
-        <div className="min-h-screen bg-gradient-to-tr from-blue-400 via-white to-blue-400">
+        <div className="min-h-screen bg-corner-glow">
             <div className="max-w-6xl mx-auto p-6">
                 {/* Back Button */}
                 <button

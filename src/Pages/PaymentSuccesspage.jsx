@@ -8,7 +8,7 @@ export const PaymentSuccess = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-400 via-white to-blue-400 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-corner-glow p-4">
       <div className="w-full max-w-xl h-[70vh]  bg-transparent  rounded-2xl p-8 text-center">
        
 

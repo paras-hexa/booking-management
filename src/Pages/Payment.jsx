@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { api } from "../api/axiosInstance";
 import { headers } from "../constant";
+import { toast } from "react-toastify";
 
 export const PaymentPage = () => {
   const navigate = useNavigate();
@@ -66,11 +67,8 @@ export const PaymentPage = () => {
         showtimeId: data.showtimeID,
         seatData,
       };
-      console.log("Order payload:", orderPayload);
-
       // make POST request to your backend
       const response = await api.post("/orders", orderPayload, { headers });
-      console.log("Order response:", response.data);
       localStorage.setItem("order response" , response.data.orderId)
       if (response.status !== 201) {
         throw new Error("Failed to create order");
@@ -87,7 +85,7 @@ export const PaymentPage = () => {
 
     } catch (err) {
       console.error("Payment error:", err);
-      alert("Something went wrong. Please try again.");
+     toast.error(err.response.data.message)
     } finally {
       setLoading(false);
     }
@@ -102,7 +100,7 @@ export const PaymentPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-400 via-white to-blue-400 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-corner-glow p-4">
       <div className="w-full max-w-md bg-white border border-blue-400 shadow-md rounded-xl p-6">
         <h2 className="text-2xl font-bold text-blue-600 mb-2">Payment</h2>
         <hr className="mb-6" />

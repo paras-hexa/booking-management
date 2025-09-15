@@ -21,41 +21,47 @@ import { TheaterDetail } from './Pages/Movie_Time';
 import { PaymentCancel } from './Pages/Paymentcancel';
 import { TicketScanView } from './Pages/ShoworderbyID';
 function App() {
-  const [count, setCount] = useState(0)
+
   return (
     <>
-
-
 
       <Routes>
 
         {/* Default route redirects to /home */}
         < Route path="/" element={<Navigate to="/login" />} />
+
         <Route path='/login' element={<Login />} />
+
         <Route path='/signup' element={<Registration />} />
+
         {/* Home nested routes */}
         <Route path="/home" element={<UseProtectedRoute><Home /></UseProtectedRoute>}>
           <Route index element={<UseProtectedRoute><Movie /></UseProtectedRoute>} />
           <Route path="theater" element={<UseProtectedRoute><Theater /></UseProtectedRoute>} />
         </Route>
+
+        <Route path="/home/movie/placeandtime/:id" element={<UseProtectedRoute><PlaceAndTime /></UseProtectedRoute>} />
+        <Route path="/home/theater/movieandtime/:id" element={<UseProtectedRoute><TheaterDetail /></UseProtectedRoute>} />
+
         <Route path="/myticket" element={<UseProtectedRoute><Myticket /></UseProtectedRoute>}>
           <Route index element={<UseProtectedRoute><TicketsList type="upcoming" /></UseProtectedRoute>} />
           <Route path="history" element={<UseProtectedRoute><TicketsList type="history" /></UseProtectedRoute>} />
         </Route>
-        <Route path="/home/movie/placeandtime/:id" element={<UseProtectedRoute><PlaceAndTime /></UseProtectedRoute>} />
-        <Route path="/home/theater/movieandtime/:id" element={<UseProtectedRoute><TheaterDetail /></UseProtectedRoute>} />
 
         <Route path="/seatselection" element={<UseProtectedRoute><Seatmap /></UseProtectedRoute>} />
+
         <Route path="/bookingdetails" element={<UseProtectedRoute><BookingDetail /></UseProtectedRoute>} />
+
         <Route path="/payment" element={<UseProtectedRoute><PaymentPage /></UseProtectedRoute>} />
+
         <Route path="/success" element={<UseProtectedRoute><PaymentSuccess /></UseProtectedRoute>} />
+
         <Route path="/cancel" element={<UseProtectedRoute><PaymentCancel /></UseProtectedRoute>} />
+
         <Route path="/viewmyticket" element={<UseProtectedRoute><TicketFinalView /></UseProtectedRoute>} />
 
         <Route path="/myticket/:orderId" element={<TicketScanView />} />
 
-
-        {/* Other pages */}
       </Routes>
 
       <ToastContainer

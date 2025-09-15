@@ -5,8 +5,6 @@ export const BookingDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log("Booking Detail Location State:", location.state);
-
   // Format date
   const date = new Date(location.state.date);
   const formatteddate = date.toLocaleDateString("en-GB", {
@@ -64,7 +62,7 @@ export const BookingDetail = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-400 via-white to-blue-400 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-corner-glow p-4">
       <div className="w-full max-w-md bg-white shadow-md rounded-xl border border-blue-300 p-6">
         {/* Title */}
         <h2 className="text-xl font-bold text-blue-600 mb-4">
@@ -86,13 +84,13 @@ export const BookingDetail = () => {
         {/* Tickets + Time */}
         <div className="flex justify-between mb-2">
 
-          <div>
+          <div >
           <span className="text-gray-500">
             Ticket ({ticket.seats.length})
           </span>
-           <p className="text-blue-500 font-medium mb-4">
+           <p className="text-blue-500 text-left font-medium mb-4">
           {ticket.seats.map((s) => `${s.seat} `)}
-        </p>
+          </p>
          </div>
 
           <div className="flex flex-col">  

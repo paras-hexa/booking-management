@@ -7,7 +7,6 @@ import { api } from '../api/axiosInstance';
 import { headers} from '../constant'
 import { useNavigate } from 'react-router-dom';
 export const Registration = () => {
-    console.log(headers);
     
     const [formData, setFormData] = useState({
         firstName: '',
@@ -30,13 +29,10 @@ export const Registration = () => {
   
        try {
          e.preventDefault();
-         console.log('Login Submitted:', formData);
          const res = await api.post("/auth/signup", formData, {
              headers: headers
  
-         })
-         console.log(res.data);
-         
+         })        
          toast.success("Sign Up Succesfuly")
          setFormData({
              firstName: '',
@@ -47,7 +43,7 @@ export const Registration = () => {
          navigate('/login')
        } catch (error) {
         console.log(error);
-        toast.error(error)
+        toast.error(error.response.data.message[0])
        }
     };
 

@@ -10,7 +10,6 @@ export const Theater = () => {
     const res = await api.get('/theaters' , {
       headers:headers
     })
-    console.log(res);
     settheaters(res.data.data)
   }
   useEffect(() => {

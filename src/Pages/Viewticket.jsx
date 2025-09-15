@@ -70,7 +70,7 @@ export const TicketFinalView = () => {
 
 }
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-tr from-blue-400 via-white to-blue-400 p-6">
+    <div className="min-h-screen flex flex-col items-center justify-between bg-corner-glow p-6">
       
       {/* Ticket Card */}
       <div className="w-full max-w-sm flex flex-col gap-3 bg-transparent rounded-xl border border-blue-500 shadow-md p-6 text-center mt-20">
@@ -90,13 +90,13 @@ export const TicketFinalView = () => {
         {/* Ticket and Hours */}
         <div className="flex justify-between items-center mb-10">
           <div>
-            <p className="text-xl font-medium text-blue-500">
-              Ticket ({ticket.seats.length})
+            <p className="text-xl font-medium text-left text-blue-500">
+            Ticket ({ticket.seats.length})
             </p>
-            <p className="text-gray-800 font-semibold">{ticket.seats.join(", ")}</p>
+            <p className="text-gray-800 text-left font-semibold">{ticket.seats.join(", ")}</p>
           </div>
           <div>
-            <p className="text-xl font-medium text-blue-500">Hours</p>
+            <p className="text-xl font-medium text-left text-blue-500">Hours</p>
             <p className="text-gray-800 font-semibold">{ticket.time}</p>
           </div>
         </div>

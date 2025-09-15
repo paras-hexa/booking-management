@@ -44,7 +44,7 @@ export const downloadTicketPDF = async (orderId) => {
     doc.rect(0, 0, 400, 600, "F");
 
     // --- Add Logo from public folder ---
-    const logo = "../public/movie_logo.png"; // place logo.png inside public/
+    const logo = "/movie_logo.png"; // ✅ Public folder access
     const img = new Image();
     img.src = logo;
     await new Promise((resolve) => {
@@ -63,7 +63,7 @@ export const downloadTicketPDF = async (orderId) => {
     // Vertical divider line (like ticket cut)
     doc.setDrawColor("#374151");
     doc.setLineWidth(1);
-    doc.line(50, 15, 50, 250); // vertical cut line
+    doc.line(50, 15, 50, 250);
     doc.line(350, 15, 350, 250);
 
     // Left side (date/time vertical)
@@ -72,25 +72,36 @@ export const downloadTicketPDF = async (orderId) => {
     doc.text(`${date}, ${time}`, 20, 180, { angle: 90 });
 
     // Middle section (Movie, Theater, Seats, Price)
+    let currentY = 150; // start Y for content
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor("#3B82F6");
-    doc.text(movie.toUpperCase(), 200, 150, { align: "center" });
+    doc.text(movie.toUpperCase(), 200, currentY, { align: "center" });
+    currentY += 20;
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(14);
     doc.setTextColor("#E5E7EB");
-    doc.text(`Theater:${theater}`, 200, 170, { align: "center" });
-    doc.text(`Seats:${seats}`, 200, 190, { align: "center" });
+    doc.text(`Theater: ${theater}`, 200, currentY, { align: "center" });
+    currentY += 20;
+
+    // Seats (wrapped with splitTextToSize)
+    const maxWidth = 280;
+    const seatLines = doc.splitTextToSize(`Seats: ${seats}`, maxWidth);
+    doc.text(seatLines, 200, currentY, { align: "center" });
+    currentY += seatLines.length * 15; // push down based on lines
 
     doc.setFontSize(14);
     doc.setTextColor("#3B82F6");
-    doc.text(`TOTAL:${totalPrice}rs`, 200, 210, { align: "center" });
+    doc.text(`TOTAL: ${totalPrice}rs`, 200, currentY, { align: "center" });
+    currentY += 30;
 
     // Blue line separator above terms
     doc.setDrawColor("#3B82F6");
     doc.setLineWidth(0.7);
-    doc.line(50, 270, 350, 270);
+    doc.line(50, currentY, 350, currentY);
+    currentY += 10;
 
     // Terms & Conditions
     doc.setFontSize(10);
@@ -98,12 +109,13 @@ export const downloadTicketPDF = async (orderId) => {
     doc.text(
       "Terms & Conditions:\nNon-refundable. Valid for date/time shown.\nNo outside food/drink allowed.",
       200,
-      280,
+      currentY + 10,
       { align: "center" }
     );
 
     // QR Code
-    const qrData = await QRCode.toDataURL(`http://localhost:5173/myticket/${orderId}`);
+    const qrText = `Ticket scanned: OrderID ${orderId}\nYou can enter the theater.`;
+    const qrData = await QRCode.toDataURL(qrText);
     doc.addImage(qrData, "PNG", 140, 310, 120, 120);
     doc.setFontSize(10);
     doc.setTextColor("#9CA3AF");

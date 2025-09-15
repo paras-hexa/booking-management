@@ -25,7 +25,6 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      console.log('Login Submitted:', formData);
       const res = await api.post("/auth/login", formData)
       const token = res.data.data.accessToken
       if (token) {
@@ -43,7 +42,7 @@ export const Login = () => {
 
     } catch (error) {
       console.log(error);
-      toast.error("Login Failed")
+      toast.error(error.response.data.message)
 
     }
   };
@@ -68,7 +67,7 @@ export const Login = () => {
             <label className="block mb-1 text-sm font-medium text-gray-700">
               Email
             </label>
-            <input
+            <input            
               type="email"
               name="email"
               value={formData.email}

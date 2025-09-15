@@ -5,7 +5,6 @@ import { NavLink } from "react-router-dom";
 
 export const SeatSelectionModal = ({ isOpen, onClose, onConfirm }) => {
   const [selectedSeats, setSelectedSeats] = useState(null);
-  console.log(selectedSeats);
   
   if (!isOpen) return null;
 

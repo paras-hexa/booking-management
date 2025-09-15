@@ -4,8 +4,8 @@
   .bg-corner-glow {
     background-color: #fff;
     background-image:
-      radial-gradient(120% 120% at 100% 0%, rgba(37,99,235,.45) 0%, rgba(37,99,235,0) 65%),
-      radial-gradient(120% 120% at 0% 100%, rgba(37,99,235,.45) 0%, rgba(37,99,235,0) 65%);
+      radial-gradient(120% 120% at 100% 0%, rgb(113, 193, 239) 0%, rgba(16,144,223,0) 65%),
+      radial-gradient(120% 120% at 0% 100%, rgb(113, 193, 239) 0%, rgba(16,144,223,0) 65%);
     background-repeat: no-repeat;
   }
 }

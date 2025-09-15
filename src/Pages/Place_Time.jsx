@@ -44,9 +44,7 @@ export const PlaceAndTime = () => {
 
 
   function formatDateToIST(dateStr) {
-    const d = new Date(dateStr);
-    console.log(d.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }) , dateStr);
-    
+    const d = new Date(dateStr);    
     return d.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
     // "YYYY-MM-DD"
   }
@@ -62,7 +60,6 @@ export const PlaceAndTime = () => {
         params: { date: formattedDate },
         headers,
       });
-    console.log("res",res.data);
     
       const nextTheaters = res.data.theaters || [];
       setTheaters(nextTheaters);
