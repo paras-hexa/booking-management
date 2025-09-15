@@ -44,7 +44,7 @@ export const PlaceAndTime = () => {
 
 
   function formatDateToIST(dateStr) {
-    const d = new Date(dateStr);    
+    const d = new Date(dateStr);
     return d.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
     // "YYYY-MM-DD"
   }
@@ -60,8 +60,13 @@ export const PlaceAndTime = () => {
         params: { date: formattedDate },
         headers,
       });
-    
-      const nextTheaters = res.data.theaters || [];
+
+;
+
+      const nextTheaters = (res.data.theaters || []).filter(
+        (t) => t.showtimes && t.showtimes.length > 0
+      ); 
+
       setTheaters(nextTheaters);
 
       if (selectedTheaterId) {
@@ -71,7 +76,7 @@ export const PlaceAndTime = () => {
         }
       }
 
-      // ✅ always reset showtime when date changes
+      //  always reset showtime when date changes
       setSelectedShowtimeId(null);
     } catch (error) {
       console.log(error);
@@ -106,9 +111,9 @@ export const PlaceAndTime = () => {
         movie: moviedata,
         date: selectedDate,
         theater: selectedTheater,     // full current theater object
-        time: selectedShowtime,  
-        showtimeID : selectedShowtime.showTimeId ,
-     // full current showtime object
+        time: selectedShowtime,
+        showtimeID: selectedShowtime.showTimeId,
+        // full current showtime object
         seats,
       },
     });
@@ -189,7 +194,7 @@ export const PlaceAndTime = () => {
                         onClick={() => setSelectedShowtimeId(show.showTimeId)}
                         className={
                           selectedShowtimeId === show.showTimeId
-                            ? "bg-blue-600 text-white py-2 rounded-lg border px-4"
+                            ? "bg-blue-600 border-blue-600 text-white py-2 rounded-lg border px-4"
                             : "border-gray-400 text-gray-600 py-2 px-4 rounded-lg border hover:bg-blue-200"
                         }
                       >
